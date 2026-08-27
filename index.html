@@ -255,94 +255,106 @@
         #postcard-page { display: none; padding-bottom: 20px; }
     </style>
 </head>
+
 <body>
-
-<div class="app-container">
-
-    <!-- ==================== [1] 책 선택 메인 화면 ==================== -->
+  <div class="app-container">
+    <!-- ==================== [1] 책 선택 메인 화면 ==================== --> 
     <div id="main-page">
-        <div class="header">🌱 <span>지구를 위한 기후 건강, </span> 나를 위한 영양 </div>
-        <div class="banner">읽고 싶은 책을 선택하고, 건강 정보 퀴즈를 맞춰보세요!</div>
+      <div class="header">
+        🌱 <span>지구를 위한 기후 건강, </span> 나를 위한 영양
+      </div>
 
-        <div class="book-list" id="book-list-container">
-            <!-- JavaScript를 통해 10권의 책이 생성됩니다 -->
-        </div>
+      <div class="banner">
+        읽고 싶은 책을 선택하고, 건강 정보 퀴즈를 맞춰보세요!
+      </div>
 
-        <div class="footer-source">
-            * 도서 표지 이미지 출처: 예스24(YES24) 홈페이지
-        </div>
+      <div class="book-list" id="book-list-container">
+        <!-- JavaScript를 통해 10권의 책이 생성됩니다 -->
+      </div>
+
+      <div class="footer-source">
+        * 도서 표지 이미지 출처: 예스24(YES24) 홈페이지
+      </div>
     </div>
 
-    <!-- ==================== [2] OX 퀴즈 페이지 ==================== -->
+    <!-- ==================== [2] OX 퀴즈 페이지 ==================== --> 
     <div id="quiz-page">
-        <div class="top-nav">
-            <span class="back-btn" onclick="goBack()">←</span>
-            <span class="nav-title">북 퀴즈 도전</span>
+      <div class="top-nav">
+        <span class="back-btn" onclick="goBack()">←</span> 
+        <span class="nav-title">북 퀴즈 도전</span>
+      </div>
+
+      <div class="quiz-content">
+        <div id="quiz-book-title" class="selected-book-title">
+          도서 제목
         </div>
 
-        <div class="quiz-content">
-            <div id="quiz-book-title" class="selected-book-title">도서 제목</div>
-
-            <div class="quiz-box">
-                <div id="quiz-question-text" class="quiz-question">퀴즈 내용이 들어갑니다.</div>
-            </div>
-
-            <div class="ox-container">
-                <button class="ox-btn" onclick="checkAnswer('O')">O</button>
-                <button class="ox-btn" onclick="checkAnswer('X')">X</button>
-            </div>
-
-            <div id="result-box" class="result-box">
-                <div id="incorrect-msg" class="incorrect-msg" style="display:none;">
-                    ❌ 틀렸습니다. 다시 해보세요!
-                </div>
-            </div>
+        <div class="quiz-box">
+          <div id="quiz-question-text" class="quiz-question">
+            퀴즈 내용이 들어갑니다.
+          </div>
         </div>
+
+        <div class="ox-container">
+          <button class="ox-btn" onclick="checkAnswer('O')">O</button> 
+          <button class="ox-btn" onclick="checkAnswer('X')">X</button>
+        </div>
+
+        <div id="result-box" class="result-box">
+          <div id="incorrect-msg" class="incorrect-msg" style="display:none;">
+            ❌ 틀렸습니다. 다시 해보세요!
+          </div>
+        </div>
+      </div>
     </div>
 
-    <!-- ==================== [3] 퀴즈 정답 엽서 페이지 (전용 엽서 1장 + 주제별 엽서 1장) ==================== -->
+    <!-- ==================== [3] 퀴즈 정답 엽서 페이지 ==================== --> 
     <div id="postcard-page">
-        <div class="top-nav">
-            <span class="back-btn" onclick="goBack()">←</span>
-            <span class="nav-title">정답 축하 엽서</span>
+      <div class="top-nav">
+        <span class="back-btn" onclick="goBack()">←</span> 
+        <span class="nav-title">정답 축하 엽서</span>
+      </div>
+
+      <div class="result-page-container">
+        <div id="postcard-book-title" class="result-page-title">
+          도서 제목
         </div>
 
-        <div class="result-page-container">
-            <div id="postcard-book-title" class="result-page-title">도서 제목</div>
-            <div class="result-page-desc">🎉 정답입니다! 준비된 엽서의 해설을 확인하세요.</div>
-
-            <!-- 1. 도서 전용 엽서 -->
-            <div class="postcard-item">
-                <div class="postcard-label">📌 도서 전용 엽서</div>
-                <img id="postcard-img-book" src="" alt="도서 전용 엽서" class="result-image" />
-                <a id="download-link-book" href="" download="도서전용엽서.jpg" class="download-btn">📥 도서 전용 엽서 저장하기</a>
-            </div>
-
-            <!-- 2. 주제별 공통 엽서 -->
-            <div class="postcard-item">
-                <div id="category-label" class="postcard-label">📌 주제별 공통 엽서</div>
-                <img id="postcard-img-category" src="" alt="주제별 공통 엽서" class="result-image" />
-                <a id="download-link-category" href="" download="주제별엽서.jpg" class="download-btn">📥 주제별 공통 엽서 저장하기</a>
-            </div>
-
-            <!-- 누적 참여자 수 카운터 -->
-            <div class="counter-msg">
-                ✉️ 지금까지 총 <span id="total-count">...</span>명이 엽서를 받았어요!
-            </div>
-
-            <!-- 하단 버튼 -->
-            <div class="btn-group">
-                <button class="home-btn" onclick="goBack()">🏠 처음으로 돌아가기</button>
-            </div>
+        <div class="result-page-desc">
+          🎉 정답입니다! 준비된 엽서의 해설을 확인하세요.
         </div>
+
+        <!-- 1. 도서 전용 엽서 --> 
+        <div class="postcard-item">
+          <div class="postcard-label">📌 도서 전용 엽서</div>
+          <img id="postcard-img-book" src="" alt="도서 전용 엽서" class="result-image"/> 
+          <a id="download-link-book" href="" download="도서전용엽서.png" class="download-btn">📥 도서 전용 엽서 저장하기</a>
+        </div>
+
+        <!-- 2. 주제별 공통 엽서 --> 
+        <div class="postcard-item">
+          <div id="category-label" class="postcard-label">📌 주제별 공통 엽서</div>
+          <img id="postcard-img-category" src="" alt="주제별 공통 엽서" class="result-image"/> 
+          <a id="download-link-category" href="" download="주제별엽서.png" class="download-btn">📥 주제별 공통 엽서 저장하기</a>
+        </div>
+
+        <!-- 누적 참여자 수 카운터 --> 
+        <div class="counter-msg">
+          ✉️ 지금까지 총 <span id="total-count">...</span>명이 엽서를 받았어요!
+        </div>
+
+        <!-- 하단 버튼 --> 
+        <div class="btn-group">
+          <button class="home-btn" onclick="goBack()">🏠 처음으로 돌아가기</button>
+        </div>
+      </div>
     </div>
+  </div>
 
-</div>
-
-<script>
+  <script>
     const CAMPAIGN_KEY = "book_quiz_campaign_postcard_count_2026";
 
-    // 1~5번: 기후건강 / 6~10번: 영양 (각 전용 엽서 + 주제 공통 엽서 세팅)
+    // 전용 엽서는 대문자 .PNG / 표지 및 공통 엽서는 소문자 .png
     const books = [
         // --- [기후건강 관련 도서 5권] ---
         {
@@ -353,8 +365,8 @@
             cover: "기후1.png",
             question: "기후 재앙으로 지구가 파괴되었을 때, 식물의 생태적 복원력은 인류의 생존과 무관하다.",
             answer: "X",
-            bookPostcard: "온실.PNG",      // 책 전용 엽서 1
-            categoryPostcard: "날씨부적.PNG",  // 기후건강 공통 엽서
+            bookPostcard: "온실.PNG",
+            categoryPostcard: "날씨부적.png",
             categoryName: "기후건강"
         },
         {
@@ -416,7 +428,7 @@
             question: "인류의 역사에서 '먹거리'와 조리 방식의 변화는 단순한 생존을 넘어 인간의 수명과 신체 발달, 사회 구조까지 바꾸어 놓았다.",
             answer: "O",
             bookPostcard: "음식의역사.PNG",
-            categoryPostcard: "건강부적.png", // 영양 공통 엽서
+            categoryPostcard: "건강부적.png",
             categoryName: "영양"
         },
         {
@@ -525,14 +537,14 @@
         if (userChoice === currentBook.answer) {
             document.getElementById('postcard-book-title').innerText = `[${currentBook.title}] 퀴즈 정답!`;
 
-            // 1. 도서 전용 엽서 및 다운로드 설정
+            // 1. 도서 전용 엽서 및 다운로드 설정 (.PNG)
             const imgBook = document.getElementById('postcard-img-book');
             const downloadBook = document.getElementById('download-link-book');
             imgBook.src = currentBook.bookPostcard;
             downloadBook.href = currentBook.bookPostcard;
-            downloadBook.download = `${currentBook.title}_전용엽서.jpg`;
+            downloadBook.download = `${currentBook.title}_전용엽서.png`;
 
-            // 2. 주제별 공통 엽서 및 다운로드 설정
+            // 2. 주제별 공통 엽서 및 다운로드 설정 (.png)
             const categoryLabel = document.getElementById('category-label');
             const imgCategory = document.getElementById('postcard-img-category');
             const downloadCategory = document.getElementById('download-link-category');
@@ -540,7 +552,7 @@
             categoryLabel.innerText = `📌 [${currentBook.categoryName}] 주제별 공통 엽서`;
             imgCategory.src = currentBook.categoryPostcard;
             downloadCategory.href = currentBook.categoryPostcard;
-            downloadCategory.download = `${currentBook.categoryName}_공통엽서.jpg`;
+            downloadCategory.download = `${currentBook.categoryName}_공통엽서.png`;
 
             // 카운터 API 호출
             fetch(`https://api.countapi.xyz/hit/${CAMPAIGN_KEY}/val`)
@@ -563,6 +575,5 @@
 
     window.onload = renderBookList;
 </script>
-
 </body>
 </html>
