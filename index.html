@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>차오름과 함께 하는 기후건강과 영양 캠페인</title>
+    <style>
+        /* 기본 레이아웃 및 폰트 */
+        body {
+            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+            background-color: #f7f9f4;
+            display: flex;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e2e;
+        }
+        .app-container {
+            width: 100%;
+            max-width: 420px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(46, 125, 50, 0.08);
+            border: 1px solid #e2ebd8;
+            position: relative;
+            min-height: 650px;
+        }
+
+        /* 헤더 */
+        .header {
+            background-color: #ffffff;
+            color: #2e7d32;
+            text-align: center;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            border-bottom: 1px solid #f0f4ec;
+        }
+        .header span { color: #fbc02d; }
+
+        .banner {
+            background-color: #fffde7;
+            color: #f57f17;
+            text-align: center;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            border-bottom: 1px solid #fff9c4;
+        }
+
+        /* 목록 영역 */
+        .book-list { padding: 16px; }
+        .book-card {
+            border: 1px solid #e8f5e9;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            background-color: #fff;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+        .book-card:hover {
+            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.12);
+            border-color: #c8e6c9;
+        }
+
+        .book-cover {
+            width: 70px;
+            height: 95px;
+            background-color: #f1f8e9;
+            border-radius: 4px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .book-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+        }
+        .book-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; color: #1b5e20; }
+        .book-author { font-size: 12px; color: #689f38; margin-bottom: 6px; }
+        .book-desc { font-size: 12px; color: #556b2f; line-height: 1.3; }
+
+        /* [추가] 이미지 출처 하단 스타일 */
+        .footer-source {
+            text-align: center;
+            font-size: 11px;
+            color: #888;
+            padding: 12px 16px 20px 16px;
+            border-top: 1px dashed #e8f5e9;
+            margin-top: 8px;
+        }
+
+        /* 상세/퀴즈 페이지 영역 */
+        #quiz-page {
+            display: none;
+            padding-bottom: 20px;
+        }
+        .top-nav {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f4ec;
+            background-color: #fff;
+        }
+        .back-btn {
+            font-size: 20px;
+            cursor: pointer;
+            color: #2e7d32;
+            margin-right: 12px;
+            font-weight: bold;
+        }
+        .nav-title { font-size: 15px; font-weight: 600; color: #2e7d32; }
+
+        .quiz-content { padding: 20px; text-align: center; }
+        .selected-book-title { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: #1b5e20; }
+
+        .quiz-box {
+            background-color: #f1f8e9;
+            border: 1px solid #dedede;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .quiz-question { font-size: 15px; font-weight: 600; line-height: 1.4; color: #2e7d32; }
+
+        /* OX 버튼 */
+        .ox-container { display: flex; gap: 15px; justify-content: center; margin-bottom: 20px; }
+        .ox-btn {
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+            font-weight: bold;
+            border-radius: 50%;
+            border: 3px solid #fbc02d;
+            background-color: #fffde7;
+            color: #f57f17;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .ox-btn:hover { background-color: #fbc02d; color: #fff; }
+
+        /* 결과 창 */
+        .result-box { display: none; margin-top: 15px; }
+        .incorrect-msg { color: #d32f2f; font-weight: bold; font-size: 14px; }
+
+        /* 엽서 이미지 페이지 레이아웃 */
+        .result-page-container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .result-page-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1b5e20;
+            margin-bottom: 8px;
+        }
+        .result-page-desc {
+            font-size: 13px;
+            color: #558b2f;
+            margin-bottom: 16px;
+        }
+        .result-image {
+            width: 100%;
+            max-width: 320px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.15);
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 2px solid #fffde7;
+        }
+
+        /* 엽서 하단 누적 참여자 카운터 문구 */
+        .counter-msg {
+            font-size: 14px;
+            font-weight: 700;
+            color: #2e7d32;
+            background-color: #e8f5e9;
+            padding: 10px 16px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            border: 1px solid #c8e6c9;
+        }
+        .counter-msg span {
+            color: #e65100;
+            font-size: 16px;
+        }
+
+        /* 버튼 컨테이너 */
+        .btn-group {
+            width: 100%;
+            max-width: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* 이미지 저장 버튼 */
+        .download-btn {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            background-color: #fbc02d;
+            color: #333;
+            text-decoration: none;
+            text-align: center;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        .download-btn:hover { background-color: #f57f17; color: #fff; }
+
+        .home-btn {
+            width: 100%;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .home-btn:hover { background-color: #1b5e20; }
+
+        #postcard-page { display: none; padding-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- ==================== [1] 책 선택 메인 화면 ==================== -->
+    <div id="main-page">
+        <div class="header">🌱 <span>차오름</span> 캠페인</div>
+        <div class="banner">읽고 싶은 책을 선택하고, 건강 정보 퀴즈를 맞춰보세요!</div>
+
+        <div class="book-list" id="book-list-container">
+            <!-- JavaScript를 통해 10권의 책이 생성됩니다 -->
+        </div>
+
+        <!-- [추가] 이미지 출처 기재 -->
+        <div class="footer-source">
+            * 도서 표지 이미지 출처: 예스24(YES24) 홈페이지
+        </div>
+    </div>
+
+    <!-- ==================== [2] OX 퀴즈 페이지 ==================== -->
+    <div id="quiz-page">
+        <div class="top-nav">
+            <span class="back-btn" onclick="goBack()">←</span>
+            <span class="nav-title">북 퀴즈 도전</span>
+        </div>
+
+        <div class="quiz-content">
+            <div id="quiz-book-title" class="selected-book-title">도서 제목</div>
+
+            <div class="quiz-box">
+                <div id="quiz-question-text" class="quiz-question">퀴즈 내용이 들어갑니다.</div>
+            </div>
+
+            <div class="ox-container">
+                <button class="ox-btn" onclick="checkAnswer('O')">O</button>
+                <button class="ox-btn" onclick="checkAnswer('X')">X</button>
+            </div>
+
+            <div id="result-box" class="result-box">
+                <div id="incorrect-msg" class="incorrect-msg" style="display:none;">
+                    ❌ 틀렸습니다. 다시 해보세요!
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== [3] 퀴즈 정답 엽서 이미지 페이지 ==================== -->
+    <div id="postcard-page">
+        <div class="top-nav">
+            <span class="back-btn" onclick="goBack()">←</span>
+            <span class="nav-title">정답 축하 엽서</span>
+        </div>
+
+        <div class="result-page-container">
+            <div id="postcard-book-title" class="result-page-title">도서 제목</div>
+            <div class="result-page-desc">🎉 정답입니다! 준비된 엽서를 확인하세요.</div>
+
+            <!-- 동적으로 변경될 엽서 이미지 -->
+            <img id="postcard-img" src="" alt="정답 엽서 이미지" class="result-image" />
+
+            <!-- 누적 참여자 수 카운터 표시 영역 -->
+            <div class="counter-msg">
+                ✉️ 지금까지 총 <span id="total-count">...</span>명이 엽서를 받았어요!
+            </div>
+
+            <!-- 하단 버튼 그룹 -->
+            <div class="btn-group">
+                <!-- 동적으로 다운로드 링크가 바뀔 저장 버튼 -->
+                <a id="download-link" href="" download="정답엽서.jpg" class="download-btn">📥 엽서 이미지 저장하기</a>
+                <button class="home-btn" onclick="goBack()">🏠 처음으로 돌아가기</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const CAMPAIGN_KEY = "book_quiz_campaign_postcard_count_2026";
+
+    // 1~5번: 기후건강 / 6~10번: 영양 관련 도서 및 엽서 세팅
+    const books = [
+        // --- [기후건강 관련 도서 5권] ---
+        {
+            id: 1,
+            title: "지구 끝의 온실",
+            author: "김초엽",
+            desc: "‘더스트’로 인해 발생한 대재앙 이후, 갑자기 증식한 ‘모스바나’라는 식물. 기후 재해로 망가진 세상에서 희망을 찾아나서는 사람들의 이야기.",
+            cover: "기후1.png",
+            question: "기후 재앙으로 지구가 파괴되었을 때, 식물의 생태적 복원력은 인류의 생존과 무관하다.",
+            answer: "X",
+            postcardImg: "postcard_climate.jpg" // 기후건강 전용 엽서
+        },
+        {
+            id: 2,
+            title: "파란하늘 빨간지구",
+            author: "조천호",
+            desc: "대기과학자가 알려주는 기후 변화 이야기. 지금 지구에는 무슨 일이 일어나고 있고, 어떤 방식으로 우리 사회를 바꿔나가야 할까?",
+            cover: "기후2.png",
+            question: "인류세(Anthropocene)란 인류가 지구 환경을 변화시킬 만큼 강력한 영향력을 행사하게 된 지질 시대를 뜻한다.",
+            answer: "O",
+            postcardImg: "postcard_climate.jpg"
+        },
+        {
+            id: 3,
+            title: "기후와 날씨, 건강 토크 토크",
+            author: "반기성, 반기석",
+            desc: "가속되는 지구온난화, 우리 건강에는 어떤 영향을 미치게 될까? 기후변화시대에 반드시 알아야 할 우리 몸을 지키는 방법.",
+            cover: "기후3.png",
+            question: "폭염이나 한파 같은 급격한 기상 이변은 심혈관 질환이나 호흡기 질환 등 인간의 신체 건강에 직접적인 악영향을 미친다.",
+            answer: "O",
+            postcardImg: "postcard_climate.jpg"
+        },
+        {
+            id: 4,
+            title: "지구는 괜찮아, 우리가 문제지",
+            author: "곽재식",
+            desc: "“세상에서 가장 이해하기 쉬운 21세기 기후 교양”, 다양한 이야기를 통해 배우는 기후 변화 시대의 상식.",
+            cover: "기후4.png",
+            question: "이산화탄소 배출량을 지금 당장 획기적으로 줄이더라도, 이미 배출된 온실가스로 인해 기후변화의 영향은 수십 년간 지속된다.",
+            answer: "O",
+            postcardImg: "postcard_climate.jpg"
+        },
+        {
+            id: 5,
+            title: "기후변화 시대의 사랑",
+            author: "김기창",
+            desc: "기후 변화를 테마로 한 단편소설집. 변화하는 기후만큼이나 변화하는 우리 삶 속에서 사랑은 어떻게 변해갈까?",
+            cover: "기후5.png",
+            question: "일상에서 전력 소비를 줄이고 대중교통을 이용하는 등의 저탄소 실천은 지구 환경뿐만 아니라 우리의 호흡기 건강 등에도 이롭다.",
+            answer: "O",
+            postcardImg: "postcard_climate.jpg"
+        },
+
+        // --- [영양 관련 도서 5권] ---
+        {
+            id: 6,
+            title: "교양인이 알아야 할 음식의 역사",
+            author: "자크 아탈리",
+            desc: "인류의 기원, 기상학, 천문학, 종교, 혁명, 농업, 산업. 우리 인류의 역사에서 먹을 것이 어떤 역할을 하는지 들려주는 이야기.",
+            cover: "영양6.png",
+            question: "인류의 역사에서 '먹거리'와 조리 방식의 변화는 단순한 생존을 넘어 인간의 수명과 신체 발달, 사회 구조까지 바꾸어 놓았다.",
+            answer: "O",
+            postcardImg: "postcard_nutrition.jpg" // 영양 전용 엽서
+        },
+        {
+            id: 7,
+            title: "맛의 원리",
+            author: "최낙언",
+            desc: "맛을 과학으로 설명한 책. 미각도 하나의 과학이자 방정식이라는 걸 알려주고자 하는 이론서",
+            cover: "영양7.png",
+            question: "유산균은 장내 유익군 증가에 도움을 주는 대표 영양 성분이다.",
+            answer: "O",
+            postcardImg: "postcard_nutrition.jpg"
+        },
+        {
+            id: 8,
+            title: "글루코스 혁명",
+            author: "제시 인차우스페",
+            desc: "먹는 방법과 순서를 조금만 바꿔도 식후 혈당 스파이크에 저항할 수 있다! 인스타그램에서 시작한 저자의 ‘좋아하는 음식을 즐기며 체중을 줄이는’ 실험 데이터..",
+            cover: "영양8.png",
+            question: "식사를 할 때 채소나 단백질을 먼저 먹고 탄수화물을 나중에 먹는 순서만 지켜도 혈당 스파이크를 효과적으로 막을 수 있다.",
+            answer: "O",
+            postcardImg: "postcard_nutrition.jpg"
+        },
+        {
+            id: 9,
+            title: "한 번 배우면 평생 쓰는 영양학",
+            author: "이이다 가오루코, 데라모토 아이",
+            desc: "영양학이란 무엇인가? 우리 몸에 좋다는 것들이 왜 좋은지 알려주는 영양학의 기초서.",
+            cover: "영양9.png",
+            question: "비타민과 무기질은 적은 양이지만 몸의 대사 기능을 원활하게 조절하는 데 필수적인 미량 영양소이다.",
+            answer: "O",
+            postcardImg: "postcard_nutrition.jpg"
+        },
+        {
+            id: 10,
+            title: "아무튼, 영양제",
+            author: "오지은",
+            desc: "현대인이라면 하나씩 섭취하고 있는 영양제, 그 영양제는 무슨 일을 하는 걸까? 영양제 서랍을 차린 저자가 말해주는 영양제 이야기.",
+            cover: "영양10.png",
+            question: "영양제는 균형 잡힌 식단을 완벽히 대신할 수 있으므로, 평소에 패스트푸드만 먹어도 영양제만 잘 챙겨 먹으면 건강을 완벽히 유지할 수 있다.",
+            answer: "X",
+            postcardImg: "postcard_nutrition.jpg"
+        }
+    ];
+
+    let currentBook = null;
+
+    function renderBookList() {
+        const container = document.getElementById('book-list-container');
+        container.innerHTML = '';
+
+        books.forEach(book => {
+            const card = document.createElement('div');
+            card.className = 'book-card';
+            card.onclick = () => openQuiz(book.id);
+
+            card.innerHTML = `
+                <img src="${book.cover}" alt="${book.title}" class="book-cover" />
+                <div class="book-info">
+                    <div class="book-title">${book.title}</div>
+                    <div class="book-author">${book.author}</div>
+                    <div class="book-desc">${book.desc}</div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function openQuiz(bookId) {
+        currentBook = books.find(b => b.id === bookId);
+
+        document.getElementById('quiz-book-title').innerText = `[${currentBook.title}] O/X 퀴즈`;
+        document.getElementById('quiz-question-text').innerText = currentBook.question;
+
+        document.getElementById('result-box').style.display = 'none';
+        document.getElementById('incorrect-msg').style.display = 'none';
+
+        hideAllPages();
+        document.getElementById('quiz-page').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function goBack() {
+        hideAllPages();
+        document.getElementById('main-page').style.display = 'block';
+        window.scrollTo(0, 0);
+    }
+
+    function hideAllPages() {
+        document.getElementById('main-page').style.display = 'none';
+        document.getElementById('quiz-page').style.display = 'none';
+        document.getElementById('postcard-page').style.display = 'none';
+    }
+
+    function checkAnswer(userChoice) {
+        const resultBox = document.getElementById('result-box');
+        const incorrectMsg = document.getElementById('incorrect-msg');
+
+        if (userChoice === currentBook.answer) {
+            document.getElementById('postcard-book-title').innerText = `[${currentBook.title}] 퀴즈 정답!`;
+
+            // 💡 선택한 책에 설정된 엽서 이미지와 다운로드 경로를 동적으로 변경
+            const imgElement = document.getElementById('postcard-img');
+            const downloadElement = document.getElementById('download-link');
+
+            imgElement.src = currentBook.postcardImg;
+            downloadElement.href = currentBook.postcardImg;
+            downloadElement.download = currentBook.postcardImg;
+
+            // 카운터 API 호출
+            fetch(`https://api.countapi.xyz/hit/${CAMPAIGN_KEY}/val`)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('total-count').innerText = data.value.toLocaleString();
+                })
+                .catch(() => {
+                    document.getElementById('total-count').innerText = "1";
+                });
+
+            hideAllPages();
+            document.getElementById('postcard-page').style.display = 'block';
+            window.scrollTo(0, 0);
+        } else {
+            resultBox.style.display = 'block';
+            incorrectMsg.style.display = 'block';
+        }
+    }
+
+    window.onload = renderBookList;
+</script>
+
+</body>
+</html>
